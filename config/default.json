@@ -1,0 +1,9 @@
+{
+    "Server": {
+        "port": 3900,
+        "env": "dev",
+        "sensorConfig": {
+            "port": 4900
+        }
+    }
+}
