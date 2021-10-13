@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { HealthService } from 'src/server/healthService';
+import { HealthService } from '../server/healthService';
 
 // https://expressjs.com/en/guide/using-middleware.html
 export class DefaultRouter {

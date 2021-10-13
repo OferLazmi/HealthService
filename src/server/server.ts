@@ -3,7 +3,7 @@ import express = require('express');
 import bodyParser = require('body-parser');
 import { ConfigurationManager, IServerConfig } from '../configuration/configurationManager';
 import { HealthService } from './healthService';
-import { DefaultRouter } from 'src/routers/defaultRouter';
+import { DefaultRouter } from '../routers/defaultRouter';
 
 process.on('uncaughtException', function (err) {
     console.log('!!!!!!!!!!!!!!!!!!!!!! uncaughtException !!!!!!!!!!!!!!!!!!!')
