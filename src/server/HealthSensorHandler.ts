@@ -12,7 +12,7 @@ export class HealthSensorHandler {
     private state: MovementState = MovementState.Idle;
     private ChangeRawToBitMap: boolean = true; // change [0-5] numbers to [0-1]
     private MinPressureValue: number = 1; //bellow that => no pressure on cell
-    private ChangeTreshHold: number = 1; //if cell value <= treshold, its not realy a change
+    private ChangeTreshHold: number = 0; //if cell value <= treshold, its not realy a change
 
     private MaxNotMovingDuration: number = 10; // Monitor => Movementneed
     private MinTimeForPositionReset: number = 5; // MovementNeeded => Monitor
