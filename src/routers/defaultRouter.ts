@@ -5,11 +5,15 @@ import { HealthService } from '../server/healthService';
 export class DefaultRouter {
 
     public static apply(router: Router, healthService: HealthService) {
-        router.get('/healthCheck', async (req, res) => {
+        router.get('/snapshot', async (req, res) => {
             try {
-                return res.status(200).send("o");
+                const snapshot = healthService.getSnapshot();
+                return res.status(200).send({
+                    dataModel: snapshot[2],
+                    state: snapshot[3],
+                });
             } catch (error) {
-                return res.sendStatus(500).send("pong error");
+                return res.sendStatus(500).send("snapshot error");
             }
         });
 

@@ -1,5 +1,7 @@
 import { IServerConfig } from "../configuration/configurationManager";
 import { HealthSensorHandler } from "./HealthSensorHandler";
+import { MovementState } from "./MovementState";
+import { SensorDataModel } from "./SensorDataModel";
 
 
 export class HealthService {
@@ -12,6 +14,10 @@ export class HealthService {
     public run() {
         //this.healthSensorHandler.test();
         this.healthSensorHandler.start();
+    }
+
+    public getSnapshot(): [SensorDataModel, SensorDataModel, MovementState, number, number] {
+        return this.healthSensorHandler.getSnapshot();
     }
 }
 
