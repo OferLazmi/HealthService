@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import { HealthService } from 'src/server/healthService';
 
 // https://expressjs.com/en/guide/using-middleware.html
 export class DefaultRouter {
 
-    public static apply(router: Router) {
+    public static apply(router: Router, healthService: HealthService) {
         router.get('/healthCheck', async (req, res) => {
             try {
                 return res.status(200).send("o");
