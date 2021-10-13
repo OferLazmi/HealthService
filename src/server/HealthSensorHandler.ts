@@ -10,6 +10,10 @@ export class HealthSensorHandler {
     private mainPosition: SensorDataModel = null;
     private lastPosition: SensorDataModel = null;
     private state: MovementState = MovementState.Idle;
+    private ChangeRawToBitMap: boolean = true; // change [0-5] numbers to [0-1]
+    private MinPressureValue: number = 1; //bellow that => no pressure on cell
+    private ChangeTreshHold: number = 1; //if cell value <= treshold, its not realy a change
+
     private MaxNotMovingDuration: number = 10; // Monitor => Movementneed
     private MinTimeForPositionReset: number = 5; // MovementNeeded => Monitor
     private MaxChangedRatioAllowed: number = 0.3; // if more than MaxChangedRatioAllowed are changed (pressure changed) => we can move from Movementneed => Movement
@@ -119,11 +123,11 @@ export class HealthSensorHandler {
 
         this.onSensorDataArrive(pose21, 22);
         console.log(this.getSnapshotString());
-        //    Idle,
-        //     Monitor,
-        //     MovementNeeded,
-        //     Movement
-        //
+	//    Idle,
+	//     Monitor,
+	//     MovementNeeded,
+	//     Movement
+        //reset - recount
         this.onSensorDataArrive(pose12, 23);
         console.log(this.getSnapshotString());
 
@@ -193,7 +197,7 @@ export class HealthSensorHandler {
         for (let x = 0; x < data.values.length; x++) {
             const item = data.values[x];
             for (let y = 0; y < item.length; y++) {
-                if (item[y] !== this.mainPosition.values[x][y]) {
+                if (Math.abs(item[y] - this.mainPosition.values[x][y]) > this.ChangeTreshHold) {
                     changeCount++;
                 }
             }
@@ -203,9 +207,30 @@ export class HealthSensorHandler {
         return threshold < this.MaxChangedRatioAllowed;
     }
 
-    private handleState(data: SensorDataModel) {
+    private toBitMap(rawData: SensorDataModel) {
+        let data = new  SensorDataModel(rawData.values);
 
-        this.lastPosition = data;
+        for (let x = 0; x < data.values.length; x++) {
+            const item = data.values[x];
+            for (let y = 0; y < item.length; y++) {
+                if (item[y] >= this.MinPressureValue) {
+                    item[y] = 1;
+                }
+                else {
+                    item[y] = 0;
+                }
+            }
+        }
+
+        return data;
+
+    }
+
+    private handleState(rawData: SensorDataModel) {
+
+        this.lastPosition = rawData;
+
+        let data = this.ChangeRawToBitMap ? this.toBitMap(rawData) : rawData;
 
         switch (this.state) {
             case MovementState.Idle: {
